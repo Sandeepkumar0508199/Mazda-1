@@ -1,0 +1,117 @@
+# Complete Breakdown of CPAD Access Packages
+
+## DEV Environment Packages
+
+**AzRsc-SMBC-CCA-MS-DEV-Data-Reader**
+- Read-only access to all data in DEV storage accounts, databases, and TDR repository.
+- Can query data but cannot create, modify, or delete any data records.
+
+**AzRsc-SMBC-CCA-MS-DEV-Sub-Reader**
+- View-only access to all Azure resources and configurations in the DEV subscription.
+- Can monitor resources but cannot make any changes to resource settings.
+
+**AzRsc-SMBC-CCA-MS-DEV-Data-Contributor**
+- Full read-write access to all data across DEV storage accounts, databases, and TDR.
+- Can run data transformation jobs and modify data in any storage layer (bronze, silver, gold).
+
+**AzRsc-SMBC-CCA-MS-DEV-DATABRICKS-ADMIN**
+- Complete administrative control over DEV Databricks workspace, clusters, and notebooks.
+- Can create jobs, install libraries, and manage all aspects of the Databricks environment.
+
+**AzRsc-SMBC-CCA-MS-DEV-App-Administrator**
+- Create and manage service principals and application authentication in DEV.
+- Configure identity federation and application permissions without data access.
+
+**AzRsc-SMBC-CCA-MS-DEV-App-Contributor**
+- Update application settings and manage application deployments in DEV.
+- Cannot perform full administrative actions like creating new applications.
+
+**AzRsc-SMBC-CCA-MS-DEV-Approver**
+- Authorize code merges and deployment approvals in the DEV environment.
+- Review and approve changes without ability to make changes themselves.
+
+## QA Environment Packages
+
+**AzRsc-SMBC-CCA-MS-QA-Approver**
+- Authorize code merges and deployment approvals in the QA environment.
+- PIM-protected role requiring supervisor approval for time-limited access (4 hours).
+
+**AzRsc-SMBC-CCA-MS-QA-Data-Reader**
+- Read-only access to all data in QA storage accounts, databases, and TDR repository.
+- PIM-protected role allowing queries but no data modifications.
+
+**AzRsc-SMBC-CCA-MS-QA-Sub-Reader**
+- View-only access to all Azure resources and configurations in the QA subscription.
+- PIM-protected role for monitoring without modification privileges.
+
+**AzRsc-SMBC-PIM-CCA-MS-QA-Data-Contributor**
+- Full read-write access to all data across QA storage accounts, databases, and TDR.
+- PIM-protected role for executing data transformations and modifications.
+
+**AzRsc-SMBC-PIM-CCA-MS-QA-DATABRICKS-ADMIN**
+- Complete administrative control over QA Databricks workspace, clusters, and notebooks.
+- PIM-protected role with highest level of Databricks management privileges.
+
+**AzRsc-SMBC-CCA-MS-QA-App-Administrator**
+- Create and manage service principals and application authentication in QA.
+- PIM-protected role for application identity management.
+
+**AzRsc-SMBC-PIM-CCAMS-TDR-QA-Data-Contributor**
+- Specialized role for writing data to the TDR repository in QA environment.
+- PIM-protected role allowing creation and modification of QA TDR tables.
+
+## REL Environment Packages
+
+**AzRsc-SMBC-CCA-MS-REL-Approver**
+- Authorize code merges and deployment approvals in the REL environment.
+- PIM-protected role requiring supervisor approval for pre-production validation.
+
+**AzRsc-SMBC-PIM-CCA-MS-REL-Data-Reader**
+- Read-only access to all data in REL storage accounts, databases, and TDR repository.
+- PIM-protected role for data querying without modification rights.
+
+**AzRsc-SMBC-CCA-MS-REL-Sub-Reader**
+- View-only access to all Azure resources and configurations in the REL subscription.
+- PIM-protected role for monitoring resources without change capabilities.
+
+**AzRsc-SMBC-PIM-CCA-MS-REL-Data-Contributor**
+- Full read-write access to all data across REL storage accounts, databases, and TDR.
+- PIM-protected role for performing data transformations in release environment.
+
+**AzRsc-SMBC-PIM-CCA-MS-REL-DATABRICKS-ADMIN**
+- Complete administrative control over REL Databricks workspace, clusters, and notebooks.
+- PIM-protected role for managing all aspects of release Databricks environment.
+
+**AzRsc-SMBC-PIM-CCA-MS-REL-App-Administrator**
+- Create and manage service principals and application authentication in REL.
+- PIM-protected role for application identity configuration in release environment.
+
+**AzRsc-SMBC-PIM-CCAMS-TDR-REL-Data-Contributor**
+- Specialized role for writing data to the TDR repository in REL environment.
+- PIM-protected role for TDR data operations in the release environment.
+
+## PROD Environment Packages
+
+**AzRsc-SMBC-CCA-MS-PROD-Approver**
+- Authorize production deployments and changes in the PROD environment.
+- PIM-protected role with highest level of scrutiny for production approvals.
+
+**AzRsc-SMBC-PIM-CCA-MS-PROD-Data-Reader**
+- Read-only access to all data in PROD storage accounts, databases, and TDR repository.
+- PIM-protected role with strict time-limited access to production data.
+
+**AzRsc-SMBC-PIM-CCA-MS-PROD-Data-Contributor**
+- Full read-write access to all data across PROD storage accounts, databases, and TDR.
+- PIM-protected role for critical data operations in production environment.
+
+**AzRsc-SMBC-CCA-MS-PROD-Sub-Reader**
+- View-only access to all Azure resources and configurations in the PROD subscription.
+- PIM-protected role for monitoring production resources without modification rights.
+
+**AzRsc-SMBC-PIM-CCA-MS-PROD-App-Administrator**
+- Create and manage service principals and application authentication in PROD.
+- PIM-protected role for managing production application identity services.
+
+**AzRsc-SMBC-PIM-CCAMS-TDR-PROD-Data-Contrib**
+- Specialized role for writing data to the TDR repository in PROD environment.
+- PIM-protected role enabling TDR data operations in the production environment.
