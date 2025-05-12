@@ -355,3 +355,16 @@ jobs:
           echo "Deployment completed for ${{ github.event.inputs.environment }} environment"
           # This could integrate with Teams, Slack, or email notifications
           # Based on the project documentation, teams notifications are already in place
+
+Subject: Re: Due Notice on Training Name(s): Harborside NJ US PPM NH Assignment Type: Required Assignment
+
+Dear OES Team,
+
+Thank you for the reminder.
+
+I have completed the Harborside NJ US PPM NH Assignment certification as required. The training has been marked as completed in the Sensei platform.
+
+Please let me know if any further action is needed on my part.
+
+Best regards,
+Sandeep Kumar
