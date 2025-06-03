@@ -1,1 +1,246 @@
+# Pipeline Call Flow - How Pipelines Call Each Other
 
+## **1. Automatic Daily Execution Chain**
+
+```
+TDR System (External) 
+    ↓ triggers
+PL_TDRRequest 
+    ↓ calls
+MasterPL for 2A 2B Patterns 
+    ↓ calls
+MasterPL 
+    ↓ calls (sequentially)
+All 14 Pattern Master Pipelines
+    ↓ completion triggers
+PL_TDRRequest (final step)
+    ↓ calls
+TDR Pipelines (External)
+```
+
+## **2. Individual Pattern Master Pipeline Calls**
+
+Each of the 14 Master Pipelines follows this call pattern:
+
+```
+[Pattern] Master PL
+    ↓ calls
+[Pattern] Child PL
+    ↓ on success calls
+OnSuccess Pipeline
+    ↓ on failure calls
+OnFailure Pipeline
+    ↓ on failure calls
+Notification Pipeline
+```
+
+## **3. Complete 14 Pattern Call Sequence (MasterPL calls these sequentially)**
+
+```
+MasterPL calls:
+    ├── Spoofing Nikko Cash Master PL
+    │       ↓ calls Spoofing Nikko Cash PL
+    │
+    ├── Spoofing Nikko Future Master PL
+    │       ↓ calls Spoofing Nikko Future PL
+    │
+    ├── Spoofing Nikko CrossProduct Master PL
+    │       ↓ calls Spoofing Nikko CrossProduct PL
+    │
+    ├── 2B Spoofing NYB FX Master PL
+    │       ↓ calls 2B Spoofing NYB FX PL
+    │
+    ├── 2B Shadowing NYB EQ Master PL
+    │       ↓ calls 2B Shadowing NYB EQ PL
+    │
+    ├── 2B Shadowing NYB FI Master PL
+    │       ↓ calls 2B Shadowing NYB FI PL
+    │
+    ├── 2B Momentum Ignition CM FI Master PL
+    │       ↓ calls 2B Momentum Ignition CM FI PL
+    │
+    ├── 2B Momentum Ignition NYB FI Master PL
+    │       ↓ calls 2B Momentum Ignition NYB FI PL
+    │
+    ├── 2B Momentum Ignition CM FX Master PL
+    │       ↓ calls 2B Momentum Ignition CM FX PL
+    │
+    ├── 2B Momentum Ignition NYB FX Master PL
+    │       ↓ calls 2B Momentum Ignition NYB FX PL
+    │
+    ├── 2B Cross Product Manipulation Master PL
+    │       ↓ calls 2B Cross Product Manipulation PL
+    │
+    ├── 2B Customer Cross NYB Master PL
+    │       ↓ calls 2B Customer Cross NYB PL
+    │
+    ├── 2B Customer Cross CM Master PL
+    │       ↓ calls 2B Customer Cross CM PL
+    │
+    └── 2B Momentum Ignition FI Nikko Master PL
+            ↓ calls 2B Momentum Ignition FI Nikko PL
+```
+
+## **4. Child Pipeline Internal Calls**
+
+Each Child Pipeline internally calls:
+
+```
+[Pattern] Child PL calls:
+    ├── DQ Check Pipeline
+    ├── Unit Testing (Databricks)
+    └── Data Processing Activities
+```
+
+## **5. Success/Failure Pipeline Calls**
+
+```
+If Child PL succeeds:
+    Master PL → calls → OnSuccess Pipeline
+
+If Child PL fails:
+    Master PL → calls → OnFailure Pipeline → calls → Notification Pipeline
+```
+
+## **6. Manual Re-run Scenarios**
+
+### **Same Day Re-run:**
+```
+Manual Trigger → [Specific Pattern] Master PL → [Specific Pattern] Child PL
+```
+
+### **Different Day Re-run:**
+```
+Manual Trigger → [Specific Pattern] Child PL (with modified BatchID) → [Specific Pattern] Master PL
+```
+
+### **All Patterns Re-run:**
+```
+Manual Trigger → MasterPL for 2A 2B Patterns → MasterPL → All 14 Master PLs → All 14 Child PLs
+```
+
+## **7. Notification Chain**
+
+```
+Pipeline Failure → OnFailure Pipeline → Notification Pipeline → Teams Channel Alert
+```
+
+## **8. Supporting Pipeline Calls**
+
+```
+Any Child PL may call:
+    ├── DQ Check
+    ├── LoadRejections
+    └── Other utility pipelines
+```
+
+This shows the direct pipeline-to-pipeline calling relationships in the CPAD Analytics system.
+
+
+# Master Pipeline to Child Pipeline Call Mapping
+
+## **Direct Master → Child Pipeline Calls**
+
+```
+1. Spoofing Nikko Cash Master PL
+   ↓ calls
+   Spoofing Nikko Cash PL
+
+2. Spoofing Nikko Future Master PL
+   ↓ calls
+   Spoofing Nikko Future PL
+
+3. Spoofing Nikko CrossProduct Master PL
+   ↓ calls
+   Spoofing Nikko CrossProduct PL
+
+4. 2B Spoofing NYB FX Master PL
+   ↓ calls
+   2B Spoofing NYB FX PL
+
+5. 2B Shadowing NYB EQ Master PL
+   ↓ calls
+   2B Shadowing NYB EQ PL
+
+6. 2B Shadowing NYB FI Master PL
+   ↓ calls
+   2B Shadowing NYB FI PL
+
+7. 2B Momentum Ignition CM FI Master PL
+   ↓ calls
+   2B Momentum Ignition CM FI PL
+
+8. 2B Momentum Ignition NYB FI Master PL
+   ↓ calls
+   2B Momentum Ignition NYB FI PL
+
+9. 2B Momentum Ignition CM FX Master PL
+   ↓ calls
+   2B Momentum Ignition CM FX PL
+
+10. 2B Momentum Ignition NYB FX Master PL
+    ↓ calls
+    2B Momentum Ignition NYB FX PL
+
+11. 2B Cross Product Manipulation Master PL
+    ↓ calls
+    2B Cross Product Manipulation PL
+
+12. 2B Customer Cross NYB Master PL
+    ↓ calls
+    2B Customer Cross NYB PL
+
+13. 2B Customer Cross CM Master PL
+    ↓ calls
+    2B Customer Cross CM PL
+
+14. 2B Momentum Ignition FI Nikko Master PL
+    ↓ calls
+    2B Momentum Ignition FI Nikko PL
+```
+
+## **Special Master Pipelines (Orchestration Level)**
+
+```
+MasterPL for 2A 2B Patterns
+   ↓ calls
+   MasterPL
+
+MasterPL
+   ↓ calls (sequentially)
+   All 14 individual Master PLs above
+
+PL_TDRRequest
+   ↓ calls
+   MasterPL for 2A 2B Patterns
+```
+
+## **Pattern-Based Grouping**
+
+### **Nikko Spoofing Patterns:**
+- Spoofing Nikko Cash Master PL → Spoofing Nikko Cash PL
+- Spoofing Nikko Future Master PL → Spoofing Nikko Future PL  
+- Spoofing Nikko CrossProduct Master PL → Spoofing Nikko CrossProduct PL
+
+### **NYB FX Patterns:**
+- 2B Spoofing NYB FX Master PL → 2B Spoofing NYB FX PL
+- 2B Momentum Ignition NYB FX Master PL → 2B Momentum Ignition NYB FX PL
+- 2B Customer Cross NYB Master PL → 2B Customer Cross NYB PL
+
+### **Shadowing Patterns:**
+- 2B Shadowing NYB EQ Master PL → 2B Shadowing NYB EQ PL
+- 2B Shadowing NYB FI Master PL → 2B Shadowing NYB FI PL
+
+### **CM Momentum Ignition Patterns:**
+- 2B Momentum Ignition CM FI Master PL → 2B Momentum Ignition CM FI PL
+- 2B Momentum Ignition CM FX Master PL → 2B Momentum Ignition CM FX PL
+
+### **NYB FI Patterns:**
+- 2B Momentum Ignition NYB FI Master PL → 2B Momentum Ignition NYB FI PL
+- 2B Momentum Ignition FI Nikko Master PL → 2B Momentum Ignition FI Nikko PL
+
+### **Cross Product/Customer Patterns:**
+- 2B Cross Product Manipulation Master PL → 2B Cross Product Manipulation PL
+- 2B Customer Cross CM Master PL → 2B Customer Cross CM PL
+
+This is the complete 1:1 mapping of which Master pipeline calls which specific Child pipeline in the CPAD Analytics system.
